@@ -2,10 +2,12 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+
+	"github.com/egustafson/fintrax/pkg/server"
 )
 
 var daemonCmd = &cobra.Command{
-	Use: "daemon",
+	Use:  "daemon",
 	RunE: doDaemon,
 }
 
@@ -14,7 +16,5 @@ func init() {
 }
 
 func doDaemon(cmd *cobra.Command, args []string) error {
-
-	var err error = nil // invoke the daemon
-	return err
+	return server.Start()
 }
