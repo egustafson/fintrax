@@ -1,0 +1,11 @@
+---
+# fintrax-example.yml
+port: 8080
+db:
+  user: ${FINTRAX_PG_USER}
+  pass: ${FINTRAX_PG_PASS}
+  host: ${FINTRAX_PG_HOST}
+  dbname: fintrax
+  tls-enabled: false
+
+...

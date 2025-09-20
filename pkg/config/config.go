@@ -8,6 +8,8 @@ func GetServerConfig() ServerConfig {
 	return serverConfig
 }
 
+// DBConfig struct --> db.go
+
 type ServerConfig struct {
 	Flags Flags     `yaml:"-" json:"-"`
 	Port  int       `yaml:"port" json:"port"`

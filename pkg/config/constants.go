@@ -9,7 +9,8 @@ import (
 const (
 
 	// Private
-	defaultPort int = 8080
+	defaultPort             int = 8080
+	defaultServerConfigFile     = "./fintrax.yml"
 )
 
 // defaults
@@ -23,4 +24,5 @@ const (
 	ENV_PG_PASS   string = "FINTRAX_PG_PASS"
 	ENV_PG_HOST   string = "FINTRAX_PG_HOST"
 	ENV_LOG_LEVEL string = "FINTRAX_LOGLEVEL"
+	ENV_CFG_FILE  string = "FINTRAX_CONFIG"
 )

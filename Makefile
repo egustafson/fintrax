@@ -5,9 +5,12 @@
 all: build test
 
 GIT_SUMMARY := $(shell git describe --tags --dirty --always)
+BUILD_VER   := $(shell git describe --tags --always)
 BUILD_DATE  := $(shell date -u "+%Y-%m-%dT%H:%M:%SZ")
 
 DIST_DIR = dist
+
+DOCKER = podman
 
 # -------------------------------------------------------------------
 GO_FLAGS =
@@ -28,6 +31,10 @@ test:
 
 .PHONY: lint
 lint:
+
+.PHONY: package
+package:
+	${DOCKER} build -t fintrax:${BUILD_VER} .
 
 .PHONY: clean
 clean:

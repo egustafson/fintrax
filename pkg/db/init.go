@@ -5,18 +5,19 @@ import (
 	"log/slog"
 
 	"github.com/egustafson/fintrax/pkg/config"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )
 
 var (
 	db *sqlx.DB
 
-	UninitalizedDbError = errors.New("db connector uninitialized")
+	ErrorUninitalizedDB = errors.New("db connector uninitialized")
 )
 
 func Init(dbConfig *config.DBConfig) (err error) {
 
-	if db, err = sqlx.Connect("postgres", dbConfig.DSN()); err != nil {
+	if db, err = sqlx.Open("pgx", dbConfig.DSN()); err != nil {
 		slog.Error("failed to connect to db", "error", err)
 		return
 	}
@@ -30,7 +31,7 @@ func Init(dbConfig *config.DBConfig) (err error) {
 
 func Healthz() error {
 	if db == nil {
-		return UninitalizedDbError
+		return ErrorUninitalizedDB
 	}
 	return db.Ping()
 }
