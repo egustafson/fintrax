@@ -1,43 +1,33 @@
-package db
+package dao
 
 import (
 	"errors"
 	"log/slog"
 
 	"github.com/egustafson/fintrax/pkg/config"
-	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )
 
 var (
-	db *sqlx.DB
-
-	ErrorUninitalizedDB = errors.New("db connector uninitialized")
+	ErrorDBUninitalized = errors.New("db connector uninitialized")
+	ErrorDBDisabled     = errors.New("db disabled in config")
 )
 
-func Init(dbConfig *config.DBConfig) (err error) {
+func initDB(dbConfig *config.DBConfig) (db *sqlx.DB, err error) {
+
+	if dbConfig.Disabled {
+		return nil, ErrorDBDisabled
+	}
 
 	if db, err = sqlx.Open("pgx", dbConfig.DSN()); err != nil {
 		slog.Error("failed to connect to db", "error", err)
-		return
+		return nil, err
 	}
 	if err = db.Ping(); err != nil {
+		db.Close()
 		slog.Error("failed to connect to db", "error", err)
-		return
+		return nil, err
 	}
 	slog.Info("db connected")
 	return
-}
-
-func Healthz() error {
-	if db == nil {
-		return ErrorUninitalizedDB
-	}
-	return db.Ping()
-}
-
-// TODO: func Status() StatusST {}
-
-func Shutdown() {
-	db.Close()
 }

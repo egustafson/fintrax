@@ -1,0 +1,43 @@
+# #+TITLE: tinkering
+
+* Tiller Tables
+
+** Transactons 
+
+  - Date
+  - Description
+  - Category
+  - Amount
+  - Account
+  - Full Description
+  - Date Added
+  - Categorized Date
+
+** Categories
+
+  - Category : String
+  - Group    : Category grouping (i.e. Household, Living, Descretionary, ...)
+  - Type     : grouping of Expense Types:  {Expense, Income, Transfer}
+  - Hide From Reports: boolean
+
+** Balances -- summary report
+
+  - Column Groups:  { Assets, Liabilities }
+  - Asset Subgroups:  { Cash, Ungrouped Assets }
+  - Liabilities Subgroups:  { Credit Card, Ungrouped Liabilities }
+
+** Accounts
+
+  - Account:  { Name + '-' + Acct # }
+  - Class Override:  { Liability | Asset }
+  - Group: { Credit Card | Cash } <-- (ref: Balances groupings)
+  - Hide: boolean
+
+** AutoCat
+
+  - Category
+  - Description Contains:  matching strings (prefix)
+  - Account Contains:      matching strings (prefix)
+  - Institution Contains:  ?
+  - Amount Min:
+  - Amount Max:

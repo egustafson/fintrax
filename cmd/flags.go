@@ -1,12 +1,14 @@
 package cmd
 
+import "github.com/egustafson/fintrax/pkg/config"
+
 // flags for fintrax
 
 var (
-	verboseFlag bool = false
+	flags = &config.Flags{}
 )
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "v", false,
-		"verbose outputx")
+	rootCmd.PersistentFlags().BoolVarP(&flags.Verbose, "verbose", "v", false,
+		"verbose output")
 }

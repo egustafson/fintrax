@@ -9,25 +9,19 @@ import (
 	"github.com/egustafson/fintrax/pkg/config"
 )
 
+var (
+	rootLogger *slog.Logger
+)
+
 func init() { // bootstrap logging: pre-config load
 	logWr := os.Stderr
 	levelStr := config.EnvOrDefault(config.ENV_LOG_LEVEL, config.DefaultLogLevel)
 
-	// TODO: check some env var for elevated debug level
-	//   i.e.:  FINTRAX_LOGLEVEL
-
-	logger := slog.New(slog.NewTextHandler(logWr, &slog.HandlerOptions{
+	rootLogger = slog.New(slog.NewTextHandler(logWr, &slog.HandlerOptions{
 		Level: strToLevel(levelStr),
 	}))
-	slog.SetDefault(logger)
+	slog.SetDefault(rootLogger)
 	slog.Debug("logger initialized", "level", levelStr)
-}
-
-func serverInitLogging(config *config.ServerConfig) error {
-	//
-	// TODO: implement
-	//
-	return nil
 }
 
 func strToLevel(levelStr string) slog.Level {

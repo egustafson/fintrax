@@ -2,12 +2,14 @@ package config
 
 import "context"
 
-func InitServerConfig(ctx context.Context /*, flags Flags */) (*ServerConfig, context.Context, error) {
+func InitServerConfig(ctx context.Context, flags *Flags) (*ServerConfig, context.Context, error) {
 
-	cfgPath := locateServerConfig()
+	serverConfig := &ServerConfig{
+		Flags: flags,
+	}
+	cfgPath := locateServerConfig(flags)
 	err := loadConfigFromFile(cfgPath, &serverConfig)
-
-	// TODO:  attach the server config to the context
-
-	return &serverConfig, ctx, err
+	serverConfig.Flags = flags
+	ctx = setServerConfig(ctx, serverConfig)
+	return serverConfig, ctx, err
 }

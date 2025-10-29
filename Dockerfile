@@ -21,4 +21,4 @@ FROM debian:trixie-slim
 WORKDIR /app
 COPY --from=builder /workspaces/fintrax/bin/fintrax .
 EXPOSE 8080
-CMD ["./fintrax", "daemon"]
+CMD ["/app/fintrax", "daemon"]

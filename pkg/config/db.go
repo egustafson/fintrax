@@ -8,6 +8,7 @@ type DBConfig struct {
 	Hostname   string `yaml:"host" json:"host"`
 	DBName     string `yaml:"dbname" json:"dbname"`
 	TLSEnabled bool   `yaml:"tls-enabled" json:"tls-enabled"`
+	Disabled   bool   `yaml:"disabled" json:"disabled"`
 }
 
 // DSN returns the Data Source Name

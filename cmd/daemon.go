@@ -19,7 +19,7 @@ func init() {
 }
 
 func doDaemon(cmd *cobra.Command, args []string) {
-	if err := server.Start(); err != nil {
+	if err := server.Start(flags); err != nil {
 		fmt.Fprintf(os.Stderr, "server failed to start: %v", err)
 	}
 }

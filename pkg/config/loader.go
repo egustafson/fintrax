@@ -16,6 +16,6 @@ func loadConfigFromFile(path string, config any) error {
 	return nil
 }
 
-func locateServerConfig() string {
+func locateServerConfig(flags *Flags) string {
 	return EnvOrDefault(ENV_CFG_FILE, defaultServerConfigFile)
 }
