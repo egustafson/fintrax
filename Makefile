@@ -13,10 +13,15 @@ DIST_DIR = dist
 DOCKER = podman
 
 # -------------------------------------------------------------------
+GO = go
 GO_FLAGS =
 
 .PHONY: build
 build: fintrax
+
+.PHONY: preflight
+preflight:
+	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
 
 ${DIST_DIR}:
 	mkdir -p ${DIST_DIR}
@@ -26,11 +31,16 @@ fintrax: ${DIST_DIR}
 	go build -ldflags "-X main.GitSummary=$(GIT_SUMMARY) -X main.BuildDate=$(BUILD_DATE)" -o ${DIST_DIR}/$@
 
 .PHONY: test
-test:
-	go test ./...
+test: test-lint
+test: unit-test
 
-.PHONY: lint
-lint:
+.PHONY: test-lint
+test-lint:
+	golangci-lint run ./...
+
+.PHONY: unit-test
+unit-test:
+	go test ./...
 
 .PHONY: package
 package:

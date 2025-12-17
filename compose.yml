@@ -1,0 +1,11 @@
+services:
+  fintrax:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fintrax
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./fintrax.yml:/config/fintrax.yml:ro
+    command: [ "./fintrax", "daemon" ]

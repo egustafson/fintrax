@@ -47,9 +47,39 @@ func Start(flags *config.Flags) error {
 	defer daoFactory.Shutdown()
 	rootMO.Attach("dao-factory", daoFactory)
 
-	// Run the HTTP server
-	defer slog.Info("server shutdown complete")
-	return serveHTTP(ctx, daoFactory, config)
+	// initialize HTTP router and plumb up middleware
+	router := gin.New()
+	router.Use(sloggin.New(rootLogger))
+	router.Use(gin.Recovery())
+
+	// Initialize the API routes
+	api.InitAPI(ctx, router)
+	// TODO:  setup UI
+
+	srv := &http.Server{
+		Addr:    fmt.Sprintf(":%d", config.Port),
+		Handler: router,
+	}
+
+	// start the HTTP/S server
+	go func() {
+		slog.Info("http server listening", "port", config.Port)
+		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
+			slog.Warn("http server shutdown", "error", err)
+			cancel() // tear everything down
+		}
+	}()
+
+	<-ctx.Done() // block until the context is canceled (server shuttting down)
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer shutdownCancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		slog.Warn("http server failed to properly shutdown", "error", err)
+		srv.Close() // force closure
+		return err
+	}
+	slog.Info("server shutdown complete")
+	return nil
 }
 
 func hookSignals(ctx context.Context) context.Context {
@@ -62,42 +92,4 @@ func hookSignals(ctx context.Context) context.Context {
 		cancel()
 	}()
 	return ctx
-}
-
-func serveHTTP(
-	ctx context.Context,
-	daoFactory dao.Factory,
-	config *config.ServerConfig) error {
-
-	ctx, cancel := context.WithCancel(ctx)
-
-	router := gin.New()
-	router.Use(sloggin.New(rootLogger))
-	router.Use(gin.Recovery())
-
-	api.InitAPI(ctx, router)
-	// TODO:  setup UI
-
-	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", config.Port),
-		Handler: router,
-	}
-
-	go func() {
-		slog.Info("http server listening", "port", config.Port)
-		if err := srv.ListenAndServe(); err != http.ErrServerClosed {
-			slog.Warn("http server shutdown", "error", err)
-			cancel() // tear everything down
-		}
-	}()
-
-	<-ctx.Done() // block until the context is canceled
-	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer shutdownCancel()
-	if err := srv.Shutdown(shutdownCtx); err != nil {
-		slog.Warn("http server failed to properly shutdown", "error", err)
-		srv.Close() // force closure
-		return err
-	}
-	return nil
 }
