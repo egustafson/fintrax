@@ -44,7 +44,7 @@ func (y YubiKeyDecryptorConfig) GetType() string {
 	return YubiKeyDecryptorType
 }
 
-func (dc *DecryptorConfig) YAMLUNmarshal(unmarshal func(interface{}) error) error {
+func (dc *DecryptorConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var typeHolder struct {
 		DecryptorType string `yaml:"type"`
 	}

@@ -1,3 +1,5 @@
+// Package locker provides an abstraction for secure storage and retrieval of
+// sensitive data.
 package locker
 
 type Locker interface {

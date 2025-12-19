@@ -44,7 +44,7 @@ func (d DBStoreConfig) GetType() string {
 	return DBStoreType
 }
 
-func (sc *StoreConfig) YAMLUNmarshal(unmarshal func(interface{}) error) error {
+func (sc *StoreConfig) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var typeHolder struct {
 		StoreType string `yaml:"type"`
 	}

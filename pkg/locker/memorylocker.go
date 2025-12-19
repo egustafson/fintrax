@@ -7,6 +7,9 @@ type memoryLocker struct {
 	store     map[string]string
 }
 
+var _ Locker = (*memoryLocker)(nil)
+
+// MakeMemoryLocker creates a new memory-based locker
 func MakeMemoryLocker(decryptor Decryptor) (Locker, error) {
 	if decryptor == nil {
 		return nil, fmt.Errorf("decryptor cannot be nil")

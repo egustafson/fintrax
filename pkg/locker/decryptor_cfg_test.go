@@ -14,7 +14,7 @@ func TestDecryptorConfig_YAMLUnmarshal_UnknownType(t *testing.T) {
 type: unknown-decryptor
 `
 	var dc locker.DecryptorConfig
-	err := dc.YAMLUNmarshal(func(v interface{}) error {
+	err := dc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.Equal(t, locker.ErrUnknownDecryptorType, err)
@@ -25,7 +25,7 @@ func TestDecryptorConfig_YAMLUnmarshal_MissingType(t *testing.T) {
 some-other-field: some-value
 `
 	var dc locker.DecryptorConfig
-	err := dc.YAMLUNmarshal(func(v interface{}) error {
+	err := dc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.Equal(t, locker.ErrMissingDecryptorType, err)
@@ -36,7 +36,7 @@ func TestDecryptorConfig_YAMLUnmarshal_NullDecryptor(t *testing.T) {
 type: null-decryptor
 `
 	var dc locker.DecryptorConfig
-	err := dc.YAMLUNmarshal(func(v interface{}) error {
+	err := dc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.NoError(t, err)
@@ -50,7 +50,7 @@ type: pw-aes-decryptor
 password: mysecretpassword
 `
 	var dc locker.DecryptorConfig
-	err := dc.YAMLUNmarshal(func(v interface{}) error {
+	err := dc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.NoError(t, err)
@@ -66,7 +66,7 @@ slot: 1
 pin: 123456
 `
 	var dc locker.DecryptorConfig
-	err := dc.YAMLUNmarshal(func(v interface{}) error {
+	err := dc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.NoError(t, err)

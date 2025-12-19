@@ -13,7 +13,7 @@ func TestStoreConfig_YAMLUnmarshal_UnknownType(t *testing.T) {
 type: unknown-store
 `
 	var sc locker.StoreConfig
-	err := sc.YAMLUNmarshal(func(v interface{}) error {
+	err := sc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.Equal(t, locker.ErrUnknownStoreType, err)
@@ -24,7 +24,7 @@ func TestStoreConfig_YAMLUnmarshal_MissingType(t *testing.T) {
 some-other-field: some-value
 `
 	var sc locker.StoreConfig
-	err := sc.YAMLUNmarshal(func(v interface{}) error {
+	err := sc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.Equal(t, locker.ErrMissingStoreType, err)
@@ -35,7 +35,7 @@ func TestStoreConfig_YAMLUnmarshal_MemoryStore(t *testing.T) {
 type: memory-store
 `
 	var sc locker.StoreConfig
-	err := sc.YAMLUNmarshal(func(v interface{}) error {
+	err := sc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.NoError(t, err)
@@ -50,7 +50,7 @@ type: yaml-store
 file-path: /path/to/store.yaml
 `
 	var sc locker.StoreConfig
-	err := sc.YAMLUNmarshal(func(v interface{}) error {
+	err := sc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.NoError(t, err)
@@ -66,7 +66,7 @@ dsn: user:password@tcp(localhost:3306)/dbname
 table-name: lockers
 `
 	var sc locker.StoreConfig
-	err := sc.YAMLUNmarshal(func(v interface{}) error {
+	err := sc.UnmarshalYAML(func(v interface{}) error {
 		return yaml.Unmarshal([]byte(yamlData), v)
 	})
 	assert.NoError(t, err)
